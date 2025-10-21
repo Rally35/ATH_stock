@@ -1,0 +1,87 @@
+"""
+Complete WIG Index Components List
+Manually extracted from Stooq page data
+To use: python3 wig_symbols_full.py
+Then copy the output to your .env file
+"""
+
+# First 50 WIG components (alphabetically)
+WIG_BATCH_1 = [
+    "06N", "11B", "1AT", "3RG", "4MS", "AAT", "ABE", "ABS", "ACG", "ACP",
+    "ACT", "AGO", "AGT", "ALE", "ALI", "ALL", "ALR", "AMB", "AMC", "ANR",
+    "APE", "APN", "APR", "APT", "ARH", "ARL", "ART", "ASB", "ASE", "AST",
+    "ATC", "ATD", "ATG", "ATP", "ATR", "ATS", "ATT", "AWM", "BBD", "BBT",
+    "BCM", "BCS", "BCX", "BDX", "BFT", "BHW", "BIO", "BIP", "BLO", "BMC"
+]
+
+# WIG20 - Most liquid stocks (best for momentum trading)
+WIG20_STOCKS = [
+    "ALE",   # Allegro - e-commerce giant
+    "PKO",   # PKO Bank Polski
+    "CDR",   # CD Projekt
+    "PZU",   # PZU insurance
+    "PEO",   # Bank Pekao
+    "KGH",   # KGHM copper
+    "PKN",   # PKN Orlen oil
+    "11B",   # 11 Bit Studios games
+    "JSW",   # JSW coal
+    "LPP",   # LPP retail
+    "OPL",   # Orange Polska telecom
+    "PGE",   # PGE energy
+    "PGN",   # PGNiG gas
+    "ALR",   # Alior Bank
+    "DNP",   # Dino retail
+    "MBK",   # mBank
+    "ACP",   # Asseco Poland IT
+    "BDX",   # Budimex construction
+    "BHW",   # Bank Handlowy
+    "SPL"    # Santander Polska
+]
+
+# Blue chips - Highest market cap and liquidity
+BLUE_CHIPS = [
+    "ALE",   # Allegro (40+ billion PLN)
+    "PKO",   # PKO BP (15+ billion PLN)
+    "CDR",   # CD Projekt
+    "ACP",   # Asseco Poland
+    "BDX",   # Budimex
+    "BHW",   # Bank Handlowy
+    "ALR",   # Alior Bank
+    "BFT"    # Benefit Systems
+]
+
+# Tech & Gaming (for momentum strategies)
+TECH_GAMING = [
+    "CDR",   # CD Projekt
+    "11B",   # 11 Bit Studios  
+    "ALE",   # Allegro
+    "ACP",   # Asseco Poland
+    "BLO",   # Bloober Team
+    "3RG",   # 3R Games
+    "BBT"    # BoomBit
+]
+
+if __name__ == "__main__":
+    print("=" * 70)
+    print("WIG Index Symbol Lists")
+    print("=" * 70)
+    print("\n1. WIG20 (Most Liquid - RECOMMENDED for momentum trading):")
+    print(f"STOCK_SYMBOLS={','.join(WIG20_STOCKS)}")
+
+    print("\n2. Blue Chips Only (Highest Quality):")
+    print(f"STOCK_SYMBOLS={','.join(BLUE_CHIPS)}")
+
+    print("\n3. Tech & Gaming Stocks (High Momentum Potential):")
+    print(f"STOCK_SYMBOLS={','.join(TECH_GAMING)}")
+
+    print("\n4. First 50 WIG Components:")
+    print(f"STOCK_SYMBOLS={','.join(WIG_BATCH_1)}")
+
+    print("\n5. Quick Test (3 stocks):")
+    print(f"STOCK_SYMBOLS=ALE,PKO,CDR")
+
+    print("\n" + "=" * 70)
+    print("\n📋 RECOMMENDED: Copy option #1 (WIG20) to your .env file")
+    print("   These are the most liquid stocks with best data availability")
+    print("\n💡 TIP: Start with option #5 (3 stocks) to test first!")
+    print("=" * 70)

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: polish_stocks_db
+    environment:
+      POSTGRES_DB: polish_stocks
+      POSTGRES_USER: trader
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change_me_in_production}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init_db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trader -d polish_stocks"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - stocks_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  stocks_network:
+    driver: bridge

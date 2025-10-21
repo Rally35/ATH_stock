@@ -1,0 +1,10 @@
+psycopg2-binary==2.9.9
+pandas==2.2.2
+pandas-datareader==0.10.0
+yfinance==0.2.40
+python-dotenv==1.0.1
+requests==2.32.3
+
+numpy==1.26.4
+sqlalchemy==2.0.31
+lxml==4.9.4
