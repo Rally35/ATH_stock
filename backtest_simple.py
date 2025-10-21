@@ -349,10 +349,10 @@ def main():
     print("="*60)
     
     # Configuration
-    start_date = '2023-01-01'  # Last 2 years
+    start_date = '2022-01-01'  # Last 2 years
     end_date = '2025-10-19'
     initial_capital = 100000.0  # 100k PLN
-    max_positions = 5
+    max_positions = 2
     
     # Run backtest
     bt = MomentumBacktest(initial_capital=initial_capital)
