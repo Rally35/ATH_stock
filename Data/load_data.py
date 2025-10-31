@@ -16,7 +16,7 @@ import time
 
 # Try to import wig20_symbols
 try:
-    from wig20_symbols import get_yahoo_symbol, get_company_name
+    from DATA.wig20_symbols import get_yahoo_symbol, get_company_name
     HAS_SYMBOL_MAPPER = True
 except ImportError:
     HAS_SYMBOL_MAPPER = False

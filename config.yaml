@@ -1,0 +1,239 @@
+# config.yaml - Strategy and Analysis Configuration
+
+# ============================================================
+# DATABASE SETTINGS
+# ============================================================
+database:
+  host: localhost
+  port: 5432
+  name: polish_stocks
+  user: trader
+  # password: stored in .env (DO NOT PUT HERE!)
+
+# ============================================================
+# DATA LOADING
+# ============================================================
+data_loading:
+  # Date range for initial data load
+  start_date: "2020-01-01"
+  end_date: "2025-10-19"  # Updated regularly
+  
+  # Data source priority
+  data_sources:
+    primary: "yahoo"        # Options: yahoo, stooq
+    fallback: "stooq"       # Fallback if primary fails
+  
+  # Stock symbols to load
+  stock_symbols:
+    - PKO
+    - PZU
+    - PEO
+    - KGH
+    - PKN
+    - PGE
+    - PGN
+    - ALR
+    - DNP
+    - MBK
+    - JSW
+    - LPP
+    - CDR
+    - "11B"
+    - ALE
+    - ACP
+    - BDX
+    - BHW
+    - OPL
+    - SPL
+  
+  # Or use preset categories
+  stock_category: "wig20"   # Options: wig20, wig30, all, custom
+
+# ============================================================
+# TECHNICAL INDICATORS
+# ============================================================
+indicators:
+  # RSI Settings
+  rsi:
+    period: 14
+    overbought_level: 70
+    oversold_level: 30
+    signal_threshold: 50    # Used for momentum signals
+  
+  # Moving Averages
+  sma:
+    short_period: 50
+    long_period: 200
+  
+  ema:
+    period: 20
+  
+  # MACD
+  macd:
+    fast_period: 12
+    slow_period: 26
+    signal_period: 9
+  
+  # ATR (volatility)
+  atr:
+    period: 14
+  
+  # All-Time High
+  ath:
+    periods:
+      - 1   # years
+      - 2
+      - 5
+    distance_threshold: 0.05  # 5% below ATH
+
+# ============================================================
+# MOMENTUM SIGNAL CRITERIA (for analyze_stocks.py)
+# ============================================================
+momentum_signals:
+  # Entry criteria (all must be TRUE)
+  entry:
+    rsi_minimum: 50              # RSI > 50 (bullish)
+    rsi_maximum: 100             # RSI < 100 (not overbought)
+    sma_short_above_long: true   # SMA50 > SMA200 (uptrend)
+    distance_from_ath_max: -0.05 # Within 5% of 5Y ATH
+    distance_from_ath_min: -0.50 # But not more than 50% below
+  
+  # Volume confirmation (optional)
+  volume:
+    confirm: true
+    volume_ratio: 1.5             # Volume > 1.5x average
+  
+  # Minimum liquidity
+  liquidity:
+    min_avg_volume: 100000        # Average daily volume
+
+# ============================================================
+# BACKTESTING SETTINGS (for backtest_simple.py)
+# ============================================================
+backtesting:
+  # Capital & Risk
+  initial_capital: 100000         # Starting in PLN
+  risk_per_trade: 0.02            # 2% of capital per trade
+  max_positions: 5                # Maximum open positions
+  
+  # Exit Rules
+  exit:
+    stop_loss_atr_multiplier: 2   # Stop at 2x ATR below entry
+    exit_on_signal_loss: true      # Exit if momentum signal disappears
+    exit_type: "signal"            # Options: signal, atr, both
+  
+  # Position Sizing
+  position_sizing:
+    method: "atr_based"           # Options: equal, atr_based, kelly
+    max_position_size_pct: 0.20   # Max 20% of capital per stock
+  
+  # Timeframe
+  backtest_period:
+    start_date: "2022-01-01"      # Test period start
+    end_date: "2025-10-19"        # Test period end
+  
+  # Filtering
+  filters:
+    min_price: 5                  # Avoid penny stocks (PLN)
+    max_price: 10000              # Avoid extreme prices
+    exclude_delisted: true        # Skip stocks with gaps
+    min_trading_days: 100         # Need at least 100 days data
+
+# ============================================================
+# ANALYSIS & SCREENING
+# ============================================================
+analysis:
+  # Near ATH screening
+  near_ath:
+    threshold: 0.10               # Find stocks within 10% of ATH
+    lookback_period: 1260         # 5 years
+  
+  # Golden Cross detection
+  golden_cross:
+    enabled: true
+    fast_sma: 50
+    slow_sma: 200
+    lookback_days: 60             # Recent crosses only
+  
+  # Display settings
+  display:
+    max_rows: 20                  # Show top N results
+    sort_by: "distance_from_ath"  # Sort order
+    decimal_places: 4             # Price decimals
+
+# ============================================================
+# OPTIMIZATION (Future use)
+# ============================================================
+optimization:
+  # Parameter ranges to test
+  rsi_range: [45, 50, 55, 60]
+  ath_distance_range: [0.03, 0.05, 0.08, 0.10]
+  atr_stop_range: [1.5, 2.0, 2.5, 3.0]
+  max_positions_range: [3, 5, 7, 10]
+  
+  # Optimization method
+  method: "walk_forward"         # Options: grid_search, walk_forward, monte_carlo
+  
+  # Performance criteria
+  target_metric: "sharpe_ratio"  # Optimize for: total_return, sharpe_ratio, win_rate
+  min_win_rate: 0.50             # Minimum acceptable win rate
+  max_drawdown: 0.30             # Maximum acceptable drawdown
+
+# ============================================================
+# DATA QUALITY & MAINTENANCE
+# ============================================================
+data_quality:
+  # Automated checks
+  check_gaps: true               # Alert on missing dates
+  check_anomalies: true          # Alert on price spikes
+  check_volume: true             # Alert on volume anomalies
+  
+  # Data cleanup
+  min_price_change: 0.001        # Ignore changes < 0.1%
+  max_daily_change: 0.50         # Alert if > 50% daily change
+  
+  # Update frequency
+  update_schedule: "daily"       # daily, weekly, manual
+  update_time: "18:00"           # Time to update (HH:MM)
+
+# ============================================================
+# REPORTING & ALERTS
+# ============================================================
+reporting:
+  # Report frequency
+  daily_summary: true
+  weekly_analysis: true
+  monthly_detailed: true
+  
+  # Alerts
+  alerts:
+    new_momentum_signal: true
+    ath_breakout: true
+    large_drawdown: true
+    strategy_violation: true
+  
+  # Alert channels (implement later)
+  channels:
+    email: false                 # enabled: true, to: "your@email.com"
+    telegram: false
+    discord: false
+  
+  # Report output
+  output:
+    save_csv: true
+    save_html: true
+    export_folder: "./reports"
+
+# ============================================================
+# LOGGING
+# ============================================================
+logging:
+  level: "INFO"                  # DEBUG, INFO, WARNING, ERROR
+  log_file: "trading_system.log"
+  console_output: true
+  
+  # What to log
+  log_data_loads: true
+  log_indicator_calcs: true
+  log_signals: true
+  log_trades: true
